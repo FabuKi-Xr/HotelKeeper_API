@@ -18,7 +18,8 @@ model Order{
   cost          Float     @default(0)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime? @updatedAt
-  deletedAt     DateTime?  
+  canceledAt    DateTime?   
+  state         OrderState @default(ORDERING)     
   QuestionAnswer QuestionAnswer[]
 }
 
@@ -46,11 +47,11 @@ model WriteReview{
 model Payment{
   refId     String    @id @default(auto()) @map("_id") @db.ObjectId
   OId       String    @db.ObjectId
-  bankID    String    @default("") // ของปั๊ป
+  bankID    String    @default("4QU") // ของปั๊ป
   balance   Float     @default(0.0)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt
-  deletedAt  DateTime?
+  Expired  DateTime?
   isPaid    Boolean   @default(false)
 }
 
@@ -66,4 +67,12 @@ model QuestionAnswer{
 
   Order Order @relation(fields: [OId],references: [OId])
   @@unique([QId,OId])
+}
+
+enum OrderState{
+    ORDERING
+    ONPAY
+    ONPROCESS
+    CANCEL
+    SUCCESS
 }
