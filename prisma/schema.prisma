@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// ต้องเชื่อม Relation +++
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Order{
+  OId           String    @id @default(auto()) @map("_id") @db.ObjectId
+  CId           String 
+  Hname         String    @unique
+  addr          String    
+  cost          Float     @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+  deletedAt     DateTime?  
+  QuestionAnswer QuestionAnswer[]
+}
+
+model OrderService{
+  id   String  @id @default(auto()) @map("_id") @db.ObjectId
+  OId  String
+  SId  String
+  @@unique(fields:[OId,SId],name: "AOrderwithUniqueService")
+}
+
+model Review{
+  RId String @id @default(auto()) @map("_id") @db.ObjectId
+  HId String
+  star Int @default(0)
+  desc String?
+}
+
+model WriteReview{
+  id  String @id @default(auto()) @map("_id") @db.ObjectId
+  HId String
+  RId String
+  @@unique(fields:[HId,RId],name: "AReviewBelongToHotel")
+}
+
+model Payment{
+  refId     String    @id @default(auto()) @map("_id") @db.ObjectId
+  OId       String    @db.ObjectId
+  bankID    String    @default("") // ของปั๊ป
+  balance   Float     @default(0.0)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
+  deletedAt  DateTime?
+  isPaid    Boolean   @default(false)
+}
+
+model Question{
+  QId String @id @default(auto()) @map("_id") @db.ObjectId
+  question String 
+}
+
+model QuestionAnswer{
+  id  String @id @default(auto()) @map("_id") @db.ObjectId
+  QId String
+  OId String 
+
+  Order Order @relation(fields: [OId],references: [OId])
+  @@unique([QId,OId])
+}
