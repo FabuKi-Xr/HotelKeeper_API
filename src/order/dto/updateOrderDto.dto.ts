@@ -1,4 +1,3 @@
-import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { ArrayMinSize, 
     ArrayNotContains, 
@@ -11,9 +10,6 @@ import { ArrayMinSize,
 } from "class-validator";
 
 export class UpdateOrderDto{
-    @IsNotEmpty()
-    @IsString()
-    OId : string
 
     @ArrayNotEmpty()
     @ArrayMinSize(1)

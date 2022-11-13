@@ -34,33 +34,29 @@ model OrderService{
 }
 
 model Review{
-  RId String @id @default(auto()) @map("_id") @db.ObjectId
-  HId String
-  star Int @default(0)
-  desc String?
-}
-
-model WriteReview{
-  id  String @id @default(auto()) @map("_id") @db.ObjectId
-  HId String
-  RId String
-  @@unique(fields:[HId,RId],name: "AReviewBelongToHotel")
+  RId       String    @id @default(auto()) @map("_id") @db.ObjectId
+  HId       String
+  star      Int       @default(0)
+  desc      String?
+  service   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Payment{
-  refId     String    @id @default(auto()) @map("_id") @db.ObjectId
-  OId       String    @db.ObjectId
-  bankID    String    @default("4QU") // ของปั๊ป
-  balance   Float     @default(0.0)
+  refId      String    @id @default(auto()) @map("_id") @db.ObjectId
+  OId        String    @db.ObjectId
+  bankID     String    @default("4QU") // ของปั๊ป
+  balance    Float     @default(0.0)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt
-  Expired  DateTime?
-  isPaid    Boolean   @default(false)
+  Expired    DateTime?
+  isPaid     Boolean   @default(false)
 }
 
 model Question{
-  QId String @id @default(auto()) @map("_id") @db.ObjectId
-  question String 
+  QId       String @id @default(auto()) @map("_id") @db.ObjectId
+  question  String 
 }
 
 model QuestionAnswer{

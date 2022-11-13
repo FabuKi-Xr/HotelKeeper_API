@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Req } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto,UpdateOrderDto,UpdateStateDto } from './dto';
 @Controller('order')
@@ -16,12 +16,12 @@ export class OrderController {
         //console.log(typeof dto.startTime)
         return this.orderService.createOrder(dto)
     }
-    @Post('update')
-    updateOrder(@Body() dto:UpdateOrderDto){
-        return this.orderService.updateOrder(dto)
+    @Put('detail/:id')
+    updateOrder(@Param('id') id:string,@Body() dto:UpdateOrderDto){
+        return this.orderService.updateOrder(id,dto)
     }
-    @Post('state')
-    updateState(@Body() dto:UpdateStateDto){
-        return this.orderService.updateState(dto)
+    @Put('state/:id')
+    updateState(@Param('id') id:string,@Body() dto:UpdateStateDto){
+        return this.orderService.updateState(id,dto)
     }
 }
