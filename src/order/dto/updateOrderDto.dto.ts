@@ -1,19 +1,33 @@
-//มีเพื่ออัพเดตสถานะของคำสั่งซื้อ -> state ของคำสั่งซื้อ
-
-import { 
+import { ApiProperty } from "@nestjs/swagger";
+import { Type } from "class-transformer";
+import { ArrayMinSize, 
+    ArrayNotContains, 
+    ArrayNotEmpty, 
+    IsArray, 
+    IsDate,  
     IsNotEmpty, 
-
+    IsString,
+    ValidateIf
 } from "class-validator";
 
-export class updateOrderDto {
-    
-    state : OrderState 
-}
+export class UpdateOrderDto{
+    @IsNotEmpty()
+    @IsString()
+    OId : string
 
-enum OrderState{
-    ORDERING = "Ordering",
-    ONPAY = "OnPay",
-    ONPROCESS = "OnProcess",
-    CANCEL = "Cancel",
-    SUCCESS = "Success",
+    @ArrayNotEmpty()
+    @ArrayMinSize(1)
+    @ArrayNotContains([""])
+    @IsArray()
+    @IsNotEmpty()
+    service : string[]; // id
+
+    @IsDate()
+    @IsNotEmpty()
+    @Type(() => Date)
+    startTime : Date
+    
+    @ValidateIf(o => o.otherProperty === 'value')
+    @IsDate()
+    endTime : Date
 }

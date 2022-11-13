@@ -6,7 +6,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api')
   app.useGlobalPipes(new ValidationPipe({
-   // whitelist : true // ให้ไอพวกที่ไม่เกี่ยวข้องไม่ต้องเข้ามา
+    whitelist : true, // ให้ไอพวกที่ไม่เกี่ยวข้องไม่ต้องเข้ามา
+    transform:true
   }))
   await app.listen(3000);
 }

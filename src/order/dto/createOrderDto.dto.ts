@@ -1,19 +1,26 @@
+import { ApiProperty } from "@nestjs/swagger";
+import { Type } from "class-transformer";
 import { 
     ArrayMinSize,
     ArrayNotContains,
     ArrayNotEmpty, 
     IsArray, 
+    IsDate,  
     IsNotEmpty,
     IsNumber,
+    ValidateIf,
 } from "class-validator";
 
 export class CreateOrderDto {
 
     @IsNotEmpty()
+    HId :string
+
+    @IsNotEmpty()
     Hname : string;
 
     @IsNotEmpty()
-    address : string;
+    addr : string;
 
     @IsNumber()
     @IsNotEmpty()
@@ -24,5 +31,14 @@ export class CreateOrderDto {
     @ArrayNotContains([""])
     @IsArray()
     @IsNotEmpty()
-    service : string[];
+    service : string[]; // id
+
+    @IsDate()
+    @IsNotEmpty()
+    @Type(() => Date)
+    startTime : Date
+
+    @ValidateIf(o => o.otherProperty === 'value')
+    @IsDate()
+    endTime : Date
 }

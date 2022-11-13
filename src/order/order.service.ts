@@ -1,20 +1,73 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateOrderDto } from './dto';
-import { updateOrderDto } from './dto/updateOrderDto.dto';
+import { CreateOrderDto,UpdateOrderDto,UpdateStateDto } from './dto';
 
 @Injectable()
 export class OrderService {
     constructor(private prisma : PrismaService){
 
     }
-    createOrder(dto:CreateOrderDto){
-        console.log(dto.service)
+////////////////// Create ////////////////////////////
+    async createOrder(dto:CreateOrderDto){
+        
+        const order:Prisma.OrderCreateInput = await this.prisma.order.create({
+            data:{
+                HId : dto.HId,
+                Hname : dto.Hname,
+                addr : dto.addr,
+                cost : dto.cost,
+                service : dto.service,
+                startTime : dto.startTime,
+            }
+        })
         return "Order was created"
     }
 
-    updateOrder(dto:updateOrderDto){
-        console.log(dto)
+////////////////// Update ////////////////////////////
+    async updateOrder(dto:UpdateOrderDto){
+        const order = await this.prisma.order.findFirst({
+            where:{
+                OId : dto.OId
+            }
+        })
+        if (order.state != 0){
+            return "You cannot update this order."
+        }
+        const update = await this.prisma.order.update({
+            where:{
+                OId:dto.OId,
+            },
+            data:{
+                service:dto.service,
+                startTime:dto.startTime,
+                endTime:dto.endTime
+            }
+        })
+        
         return "Order was updated"
+    }
+    async updateState(dto : UpdateStateDto){
+        const update = await this.prisma.order.update({
+            where:{
+                OId:dto.OId
+            },
+            data:{
+                state : dto.state
+            }
+        })
+        return "State was updated"
+    }
+////////////////// Get ////////////////////////////   
+    async getOrder(HId : string){
+        const order = await this.prisma.order.findMany({
+            where:{
+                HId : HId
+            },
+        })
+        console.log(new Date().toISOString())
+        return {
+            timestamp : new Date().toISOString(),
+            order}
     }
 }

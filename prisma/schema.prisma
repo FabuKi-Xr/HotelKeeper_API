@@ -12,14 +12,17 @@ datasource db {
 
 model Order{
   OId           String    @id @default(auto()) @map("_id") @db.ObjectId
-  CId           String 
+  HId           String 
   Hname         String    @unique
   addr          String    
   cost          Float     @default(0)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime? @updatedAt
-  canceledAt    DateTime?   
-  state         OrderState @default(ORDERING)     
+  canceledAt    DateTime? 
+  service       String[]    //แก้ด้วยจ้า
+  state         Int       @default(0)   
+  startTime     DateTime  
+  endTime       DateTime?   
   QuestionAnswer QuestionAnswer[]
 }
 
@@ -70,9 +73,9 @@ model QuestionAnswer{
 }
 
 enum OrderState{
-    ORDERING
-    ONPAY
-    ONPROCESS
+    CONFIRM
     CANCEL
+    ONPAY
+    INPROGRESS
     SUCCESS
 }
