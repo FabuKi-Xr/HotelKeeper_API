@@ -49,7 +49,6 @@ model Payment{
   bankID     String    @default("4QU") // ของปั๊ป
   balance    Float     @default(0.0)
   createdAt  DateTime  @default(now())
-  updatedAt  DateTime? @updatedAt
   Expired    DateTime?
   isPaid     Boolean   @default(false)
 }
@@ -63,7 +62,7 @@ model QuestionAnswer{
   id  String @id @default(auto()) @map("_id") @db.ObjectId
   QId String
   OId String 
-
+  answer Boolean 
   Order Order @relation(fields: [OId],references: [OId])
   @@unique([QId,OId])
 }
