@@ -13,10 +13,14 @@ export class PaymentController {
     test(){
         return "Hello"
     }
-    @Post('QRpayment')
+    @Post('KB/QRpayment')
     getQRpayment(@Body() dto:QRcodeDto){
         let payment = new PaymentMethodB(new HttpService())
         this.paymentService.setPayment(payment)
         return this.paymentService.getQR(dto)
+    }
+    @Post('KB/cancel')
+    cancelQR(){
+        return this.paymentService.cancelQR()
     }
 }

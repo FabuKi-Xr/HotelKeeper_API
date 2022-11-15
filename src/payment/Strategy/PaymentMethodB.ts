@@ -1,8 +1,9 @@
 import { HttpService } from "@nestjs/axios";
-import { Injectable, Logger } from "@nestjs/common";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import {  Logger } from "@nestjs/common";
+import { AxiosError, AxiosResponse } from "axios";
 import { catchError, firstValueFrom, Observable } from "rxjs";
-import { authMsg, genQRMsg } from "../messages";
+import { authMsg, cancelQRMsg, genQRMsg } from "../messages";
+import { TokenSingleton } from "../Token";
 import { PaymentStrategy } from "./payment.interface";
 
 export class PaymentMethodB implements PaymentStrategy{
@@ -10,10 +11,14 @@ export class PaymentMethodB implements PaymentStrategy{
     private token 
     constructor(private readonly httpService:HttpService){
         this.httpService = new HttpService()
-        this.token = null
+        //this.token = TokenSingleton.getInstance()
     }
     async getQRcode(amount:number) {
-        await this.auth()
+        this.token = TokenSingleton.getInstance()
+        this.token.setToken(await this.auth())
+        //console.log(this.token.getToken())
+        TokenSingleton.objectTimeout()
+
         let date = await new Date().toLocaleString('sv-SE').split(' ')
         const {data} = await firstValueFrom(
             this.httpService.post(process.env.KBank_genQR,
@@ -22,7 +27,7 @@ export class PaymentMethodB implements PaymentStrategy{
                     "requestDt" : date[0]+"T"+date[1]+"Z"
                 }
                 ,{headers:{
-                        "Authorization" : `Bearer ${this.token}`,
+                        "Authorization" : `Bearer ${this.token.getToken()}`,
                         ...genQRMsg.headers
                     }
                 })
@@ -33,11 +38,12 @@ export class PaymentMethodB implements PaymentStrategy{
                     }),
                 ),
             );
-        console.log(data)
+        // console.log(data)
+        return data
         
     }
     async auth() {
-        console.log("Auth")
+        // console.log("Auth")
         const {data} = await firstValueFrom(
             this.httpService.post(process.env.KBank_OAUTH,authMsg.body,{headers:authMsg.headers})
                 .pipe(
@@ -47,9 +53,29 @@ export class PaymentMethodB implements PaymentStrategy{
                     }),
                 ),
             );
-        this.token = data.access_token
-        console.log(this.token)
-        return 
+        // this.token = data.access_token
+        return data.access_token
     }
-    
+    async cancelQR(){
+        let date = await new Date().toLocaleString('sv-SE').split(' ')
+        const {data} = await firstValueFrom(
+            this.httpService.post(process.env.KBank_cancelQR,
+                {...cancelQRMsg.body,
+                    "requestDt" : date[0]+"T"+date[1]+"Z"
+                }
+                ,{headers:{
+                        "Authorization" : `Bearer ${this.token.getToken()}`,
+                        ...cancelQRMsg.headers
+                    }
+                })
+                .pipe(
+                    catchError((error : AxiosError)=>{
+                        this.logger.error(error.response.data)
+                        throw "An error happened!"
+                    }),
+                ),
+            );
+        // console.log(data)
+        return data
+    }
 }

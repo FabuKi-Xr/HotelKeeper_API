@@ -7,4 +7,7 @@ export class PaymentMethodA implements PaymentStrategy{
     async auth() {
         
     }
+    async cancelQR() {
+        
+    }
 }
