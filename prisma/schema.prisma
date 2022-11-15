@@ -24,6 +24,7 @@ model Order{
   startTime     DateTime  
   endTime       DateTime?   
   QuestionAnswer QuestionAnswer[]
+  //Payment        Payment[]
 }
 
 model OrderService{
@@ -45,12 +46,13 @@ model Review{
 
 model Payment{
   refId      String    @id @default(auto()) @map("_id") @db.ObjectId
-  OId        String    @db.ObjectId
-  bankID     String    @default("4QU") // ของปั๊ป
+  OId        String    
+  bankID     String    @default("4QU") 
   balance    Float     @default(0.0)
   createdAt  DateTime  @default(now())
-  Expired    DateTime?
+  Expired    DateTime? 
   isPaid     Boolean   @default(false)
+  //order      Order     @relation(fields: [OID],references: [OId])
 }
 
 model Question{

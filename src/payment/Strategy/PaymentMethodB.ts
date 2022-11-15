@@ -8,10 +8,14 @@ import { PaymentStrategy } from "./payment.interface";
 
 export class PaymentMethodB implements PaymentStrategy{
     private readonly logger = new Logger(PaymentMethodB.name);
+    private bankID = "KBank"
     private token 
     constructor(private readonly httpService:HttpService){
         this.httpService = new HttpService()
         //this.token = TokenSingleton.getInstance()
+    }
+    async getBankId() {
+        return this.bankID
     }
     async getQRcode(amount:number) {
         this.token = TokenSingleton.getInstance()
