@@ -4,14 +4,16 @@ import { AxiosError, AxiosResponse } from "axios";
 import { catchError, firstValueFrom, Observable } from "rxjs";
 import { authMsg, cancelQRMsg, genQRMsg } from "../messages";
 import { TokenSingleton } from "../Token";
+import { PaymentTemplate } from "./payment.abstract";
 import { PaymentStrategy } from "./payment.interface";
 
-export class PaymentMethodB implements PaymentStrategy{
+export class PaymentMethodB extends PaymentTemplate{
     private readonly logger = new Logger(PaymentMethodB.name);
     private bankID = "KBank"
     private token 
     constructor(private readonly httpService:HttpService){
-        this.httpService = new HttpService()
+        super()
+        //this.httpService = new HttpService()
         //this.token = TokenSingleton.getInstance()
     }
     async getBankId() {

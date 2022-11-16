@@ -3,21 +3,22 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdatePaidDto, QRcodeDto, PaymentDto } from './dto';
 import { PaymentStrategy } from './Strategy';
+import { PaymentTemplate } from './Strategy/payment.abstract';
 
 @Injectable()
 export class PaymentService {
-    private payment:PaymentStrategy
+    private payment:PaymentTemplate
 
     constructor(private prisma : PrismaService){
     }
 
-    setPayment(payment:PaymentStrategy){
+    setPayment(payment:PaymentTemplate){
         this.payment = payment
     }
 
     ////////////////// create /////////////////////////
     async getQR(dto:QRcodeDto){ // for post
-        const bankID = this.payment.getBankId()
+        const bankID = this.payment.getBankID()
         
         const payDB:Prisma.PaymentCreateInput = await this.prisma.payment.create({
             data:{
