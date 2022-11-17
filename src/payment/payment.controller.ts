@@ -10,7 +10,7 @@ export class PaymentController {
     constructor(private paymentService:PaymentService){
 
     }
-    @Post('KB/QRpayment')
+    @Post('QRpayment')
     getQRpayment(@Body() dto:QRcodeDto){
         let payment = new PaymentMethodB(new HttpService())
         this.paymentService.setPayment(payment)
