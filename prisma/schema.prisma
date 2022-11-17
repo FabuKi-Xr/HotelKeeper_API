@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model CartUser {
+  cart_id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  u_id          String
+  total         Float     @default(0.0)
+  order_request Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+}
+
+model CartService {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  cart_id       String
+  s_id          String
+  time_start    DateTime  @default(now())
+  time_finish   DateTime?
+  num_maid      Int       @default(1) // จำนวนคนที่จะจ้าง
+  order_request Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+
+  @@unique(fields: [cart_id, s_id], name: "cartServiceId")
+}
+
+model Service {
+  s_id      String    @id @default(auto()) @map("_id") @db.ObjectId
+  s_name    String
+  s_info    String?
+  s_price   Float     @default(0.0)
+  s_type    String?
+  s_img     String? // img path
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
