@@ -1,25 +1,29 @@
+import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdatePaidDto, QRcodeDto, PaymentDto } from './dto';
-import { PaymentStrategy } from './Strategy';
-import { PaymentTemplate } from './Strategy/payment.abstract';
+import { PaymentMethodA, PaymentMethodB, PaymentStrategy } from './Strategy';
 
 @Injectable()
 export class PaymentService {
-    private payment:PaymentTemplate
+    private payment:PaymentStrategy
 
     constructor(private prisma : PrismaService){
     }
 
-    setPayment(payment:PaymentTemplate){
-        this.payment = payment
-    }
+    // setPayment(payment:PaymentTemplate){
+    //     this.payment = payment
+    // }
 
     ////////////////// create /////////////////////////
     async getQR(dto:QRcodeDto){ // for post
-        const bankID = this.payment.getBankID()
-        
+        if (dto.bankID == "KBank"){
+            this.payment = new PaymentMethodB(new HttpService)
+        }
+        if (dto.bankID == "4QU"){
+            this.payment = new PaymentMethodA(new HttpService)
+        }
         const payDB:Prisma.PaymentCreateInput = await this.prisma.payment.create({
             data:{
                 OId : dto.OId,
@@ -27,13 +31,13 @@ export class PaymentService {
                 balance : dto.amount,
             }
         })
-        return await this.payment.getQRcode(dto.amount)
+        return await this.payment.pay(dto.amount)
     }
 
     /////////////////// update /////////////////////
-    async cancelQR(){
-        return await this.payment.cancelQR()
-    }
+    // async cancelQR(){
+    //     return await this.payment.cancelQR()
+    // }
     async updatePaymentState(dto:UpdatePaidDto){
         const update:Prisma.PaymentUpdateInput = await this.prisma.payment.update({
             where:{

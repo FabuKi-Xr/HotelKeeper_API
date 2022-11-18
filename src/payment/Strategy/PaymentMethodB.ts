@@ -4,26 +4,25 @@ import { AxiosError, AxiosResponse } from "axios";
 import { catchError, firstValueFrom, Observable } from "rxjs";
 import { authMsg, cancelQRMsg, genQRMsg } from "../messages";
 import { TokenSingleton } from "../Token";
-import { PaymentTemplate } from "./payment.abstract";
 import { PaymentStrategy } from "./payment.interface";
 
-export class PaymentMethodB extends PaymentTemplate{
+export class PaymentMethodB implements PaymentStrategy{
     private readonly logger = new Logger(PaymentMethodB.name);
     private bankID = "KBank"
     private token 
     constructor(private readonly httpService:HttpService){
-        super()
         //this.httpService = new HttpService()
-        //this.token = TokenSingleton.getInstance()
+        // this.token = TokenSingleton.getInstance()
     }
-    async getBankId() {
-        return this.bankID
-    }
-    async getQRcode(amount:number) {
+    public async pay(amount: number) {
         this.token = TokenSingleton.getInstance()
-        this.token.setToken(await this.auth())
-        //console.log(this.token.getToken())
-        TokenSingleton.objectTimeout()
+        if (this.token.getToken() == null){
+            this.token.setToken(await this.auth())
+            TokenSingleton.objectTimeout()
+        }
+        return await this.getQRcode(amount)
+    }
+    private async getQRcode(amount:number) {
 
         let date = await new Date().toLocaleString('sv-SE').split(' ')
         const {data} = await firstValueFrom(
@@ -48,7 +47,7 @@ export class PaymentMethodB extends PaymentTemplate{
         return data
         
     }
-    async auth() {
+    private async auth() {
         // console.log("Auth")
         const {data} = await firstValueFrom(
             this.httpService.post(process.env.KBank_OAUTH,authMsg.body,{headers:authMsg.headers})
@@ -61,27 +60,5 @@ export class PaymentMethodB extends PaymentTemplate{
             );
         // this.token = data.access_token
         return data.access_token
-    }
-    async cancelQR(){
-        let date = await new Date().toLocaleString('sv-SE').split(' ')
-        const {data} = await firstValueFrom(
-            this.httpService.post(process.env.KBank_cancelQR,
-                {...cancelQRMsg.body,
-                    "requestDt" : date[0]+"T"+date[1]+"Z"
-                }
-                ,{headers:{
-                        "Authorization" : `Bearer ${this.token.getToken()}`,
-                        ...cancelQRMsg.headers
-                    }
-                })
-                .pipe(
-                    catchError((error : AxiosError)=>{
-                        this.logger.error(error.response.data)
-                        throw "An error happened!"
-                    }),
-                ),
-            );
-        // console.log(data)
-        return data
     }
 }

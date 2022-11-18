@@ -1,6 +1,3 @@
 export interface PaymentStrategy {
-    getQRcode(amount:number)
-    getBankId()
-    auth()
-    cancelQR()
+    pay(amount:number)
 }

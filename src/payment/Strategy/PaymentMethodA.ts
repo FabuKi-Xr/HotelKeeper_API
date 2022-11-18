@@ -1,15 +1,22 @@
-import { PaymentTemplate } from "./payment.abstract";
+import { HttpService } from "@nestjs/axios";
 import { PaymentStrategy } from "./payment.interface";
 
-export class PaymentMethodA extends PaymentTemplate{
+export class PaymentMethodA implements PaymentStrategy{
     private bankID = "Q4U"
-    async getBankId() {
-        return this.bankID
+
+    constructor(private httpservice:HttpService){
+        
     }
-    async getQRcode(amount:number) {
+    public pay(amount: number) {
+        
     }
-    async auth() {
-    }
-    async cancelQR() {
-    }
+    // async getBankId() {
+    //     return this.bankID
+    // }
+    // async getQRcode(amount:number) {
+    // }
+    // async auth() {
+    // }
+    // async cancelQR() {
+    // }
 }
