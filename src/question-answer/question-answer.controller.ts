@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param,Post,Query,Request } from '@nestjs/common';
+import { Body, Controller, Get, Param,Post,Put,Query,Request } from '@nestjs/common';
 import { AnswerDto } from './dto/answerDto.dto';
 import { searchAnswerDto } from './dto/searchAnswerDto.dto';
 import { QuestionAnswerService } from './question-answer.service';
@@ -16,5 +16,10 @@ export class QuestionAnswerController {
     @Post('/create')
     createQA(@Body() dto:AnswerDto){
         return this.questionAnswerService.createQA(dto)
+    }
+
+    @Put('/update')
+    update(@Body() dto:AnswerDto){
+        return this.questionAnswerService.updateQA(dto)
     }
 }

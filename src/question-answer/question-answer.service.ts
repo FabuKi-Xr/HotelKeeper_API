@@ -27,4 +27,18 @@ export class QuestionAnswerService {
         })
         return "QA was created."
     }
+    async updateQA(dto:AnswerDto){
+        const answer:Prisma.QuestionAnswerWhereUniqueInput = await this.prisma.questionAnswer.update({
+            where:{
+                key:{
+                    QId:dto.QId,
+                    OId:dto.OId
+                }     
+            },
+            data:{
+                answer:dto.ans
+            }
+        })
+        return "Order's QA was update."
+    }
 }

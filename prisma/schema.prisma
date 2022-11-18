@@ -66,7 +66,7 @@ model QuestionAnswer{
   OId String 
   answer Boolean 
   Order Order @relation(fields: [OId],references: [OId])
-  @@unique([QId,OId])
+  @@unique([QId,OId],name:"key")
 }
 
 enum OrderState{
