@@ -12,18 +12,18 @@ export class PaymentService {
     constructor(private prisma : PrismaService){
     }
 
-    // setPayment(payment:PaymentStrategy){
-    //     this.payment = payment
-    // }
+    setPayment(payment:PaymentStrategy){
+        this.payment = payment
+    }
 
     ////////////////// create /////////////////////////
     async getQR(dto:QRcodeDto){ // for post
-        if (dto.bankID == "KBank"){
-            this.payment = new PaymentMethodB(new HttpService)
-        }
-        if (dto.bankID == "4QU"){
-            this.payment = new PaymentMethodA(new HttpService)
-        }
+        // if (dto.bankID == "KBank"){
+        //     this.payment = new PaymentMethodB(new HttpService)
+        // }
+        // if (dto.bankID == "4QU"){
+        //     this.payment = new PaymentMethodA(new HttpService)
+        // }
         const payDB:Prisma.PaymentCreateInput = await this.prisma.payment.create({
             data:{
                 OId : dto.OId,

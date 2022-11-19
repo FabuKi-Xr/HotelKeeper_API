@@ -8,7 +8,7 @@ export class PaymentMethodA implements PaymentStrategy{
         
     }
     public pay(amount: number) {
-        
+        return {qrcode:`You have create pupz'bank ${amount} BHT`}
     }
     // async getBankId() {
     //     return this.bankID
