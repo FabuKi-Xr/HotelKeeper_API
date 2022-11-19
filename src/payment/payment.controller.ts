@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Body, Controller, Get,Post } from '@nestjs/common';
+import { Body, Controller, Get,Param,Post, Put } from '@nestjs/common';
 import { PaymentDto, UpdatePaidDto } from './dto';
 import { QRcodeDto } from './dto/QRcodeDto.dto';
 import { PaymentService } from './payment.service';
@@ -30,5 +30,9 @@ export class PaymentController {
     @Post()
     getPayment(@Body() dto:PaymentDto){
         return this.paymentService.getPayment(dto)
+    }
+    @Put('/update')
+    updatePaymentState(@Body() dto:UpdatePaidDto){
+        return this.paymentService.updatePaymentState(dto)
     }
 }

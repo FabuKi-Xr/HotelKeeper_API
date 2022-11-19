@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdatePaidDto, QRcodeDto, PaymentDto } from './dto';
-import { PaymentMethodA, PaymentMethodB, PaymentStrategy } from './Strategy';
+import { PaymentStrategy } from './Strategy';
 
 @Injectable()
 export class PaymentService {
@@ -39,6 +39,7 @@ export class PaymentService {
     //     return await this.payment.cancelQR()
     // }
     async updatePaymentState(dto:UpdatePaidDto){
+        console.log(dto)
         const update:Prisma.PaymentUpdateInput = await this.prisma.payment.update({
             where:{
                 refId : dto.refId
@@ -51,6 +52,7 @@ export class PaymentService {
     }
     /////////////// getpaymentByOrderId ////////////////////
     async getPayment(dto:PaymentDto){
+        console.log(dto)
         const data = await this.prisma.payment.findFirst({
             where:{
 
