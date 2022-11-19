@@ -12,7 +12,7 @@ export class PaymentService {
     constructor(private prisma : PrismaService){
     }
 
-    // setPayment(payment:PaymentTemplate){
+    // setPayment(payment:PaymentStrategy){
     //     this.payment = payment
     // }
 
