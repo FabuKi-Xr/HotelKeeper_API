@@ -18,6 +18,18 @@ export class QuestionAnswerService {
         return answer
     }
     async createQA(dto:AnswerDto){
+        const qa = await this.prisma.questionAnswer.findFirst({
+            where:{
+                QId:dto.QId,
+                OId:dto.OId,
+            }
+        })
+        if (qa){
+            return{
+                statuscode: 400,
+                msg:"ตรวจพบคำตอบของออเดอร์นี้แล้วดังกล่าว"
+            }
+        }
         const answer:Prisma.QuestionAnswerCreateWithoutOrderInput = await this.prisma.questionAnswer.create({
             data:{
                 QId:dto.QId,
@@ -32,8 +44,8 @@ export class QuestionAnswerService {
             where:{
                 key:{
                     QId:dto.QId,
-                    OId:dto.OId
-                }     
+                    OId:dto.OId,
+                },
             },
             data:{
                 answer:dto.ans
@@ -41,4 +53,5 @@ export class QuestionAnswerService {
         })
         return "Order's QA was update."
     }
+    
 }

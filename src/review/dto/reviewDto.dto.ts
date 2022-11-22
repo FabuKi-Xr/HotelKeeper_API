@@ -4,6 +4,8 @@ export class reviewDto{
     
     @IsNotEmpty()
     HId : string
+    @IsNotEmpty()
+    Hname : string
 
     @IsInt()
     @IsNotEmpty()

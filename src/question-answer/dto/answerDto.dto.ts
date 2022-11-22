@@ -11,11 +11,11 @@ export class AnswerDto{
     @IsNotEmpty()
     @IsString()
     OId : string
-    
+
     @ApiProperty()
-    @IsBoolean()
+    @IsString()
     @IsNotEmpty()
-    ans : boolean
+    ans : string
     
 
 }

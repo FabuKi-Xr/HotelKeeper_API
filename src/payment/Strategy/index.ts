@@ -1,3 +1,3 @@
 export * from './payment.interface'
-export * from './PaymentMethodA'
-export * from './PaymentMethodB'
+export * from './4QU'
+export * from './KBank'

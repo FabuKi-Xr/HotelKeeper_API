@@ -39,7 +39,7 @@ export class PaymentService {
     //     return await this.payment.cancelQR()
     // }
     async updatePaymentState(dto:UpdatePaidDto){
-        console.log(dto)
+        //console.log(dto)
         const update:Prisma.PaymentUpdateInput = await this.prisma.payment.update({
             where:{
                 refId : dto.refId
@@ -50,16 +50,34 @@ export class PaymentService {
         })
         return "update payment successfully."
     }
+    async updateStatus(id:string){
+        const status = await this.payment.status()
+        if (status.status == "PAID"){
+            const res = await this.prisma.payment.update({
+                where:{
+                    OId : id
+                },
+                data:{
+                    isPaid:true
+                }
+            })
+        }
+        return status
+    }
     /////////////// getpaymentByOrderId ////////////////////
     async getPayment(dto:PaymentDto){
-        console.log(dto)
         const data = await this.prisma.payment.findFirst({
             where:{
-
                 OId : dto.OId,
                 refId : dto.refId 
             }
         })
+        if (!data){
+            return {
+                msg:"invilid refID or OId",
+                statuscode:400
+            }
+        }
         return {data:data,msg:"Your request was fulfill.",statuscode:200}
     }
 }

@@ -37,16 +37,17 @@ model OrderService{
 model Review{
   RId       String    @id @default(auto()) @map("_id") @db.ObjectId
   HId       String
+  Hname     String
   star      Int       @default(0)
   desc      String?
-  service   String
+  service   String?
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 }
 
 model Payment{
   refId      String    @id @default(auto()) @map("_id") @db.ObjectId
-  OId        String    
+  OId        String    @unique()
   bankID     String    @default("4QU") 
   balance    Float     @default(0.0)
   createdAt  DateTime  @default(now())
@@ -63,8 +64,8 @@ model Question{
 model QuestionAnswer{
   id  String @id @default(auto()) @map("_id") @db.ObjectId
   QId String
-  OId String 
-  answer Boolean 
+  OId String
+  answer String 
   Order Order @relation(fields: [OId],references: [OId])
   @@unique([QId,OId],name:"key")
 }

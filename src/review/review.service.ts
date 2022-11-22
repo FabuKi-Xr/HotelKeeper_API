@@ -11,6 +11,7 @@ export class ReviewService {
         const review:Prisma.ReviewCreateInput = await this.prisma.review.create({
             data:{
                 HId : dto.HId,
+                Hname :dto.Hname,
                 star : dto.star,
                 desc : dto.desc,
                 service : dto.service

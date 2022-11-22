@@ -56,7 +56,10 @@ export class OrderService {
                 state : dto.state
             }
         })
-        return "State was updated"
+        return {
+            statuscode: 200,
+            msg : "State was updated"
+        }
     }
 ////////////////// Get ////////////////////////////   
     async getOrder(HId : string){
