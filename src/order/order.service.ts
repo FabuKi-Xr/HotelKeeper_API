@@ -21,7 +21,9 @@ export class OrderService {
                 startTime : dto.startTime,
             }
         })
-        return "Order was created"
+        return {msg:"Order was created",
+            statuscode:200
+        }
     }
 
 ////////////////// Update ////////////////////////////
@@ -45,7 +47,9 @@ export class OrderService {
             }
         })
         
-        return "Order was updated"
+        return {msg:"Order was updated",
+            statuscode:200
+        }
     }
     async updateState(id:string,dto : UpdateStateDto){
         const update = await this.prisma.order.update({

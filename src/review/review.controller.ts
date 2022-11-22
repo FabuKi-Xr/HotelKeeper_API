@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
-import { reviewDto } from './dto';
+import { ReviewDto } from './dto';
 import { UpdateReviewDto } from './dto/updateReviewDto.dto';
 import { ReviewService } from './review.service';
 
@@ -16,7 +16,7 @@ export class ReviewController {
         return this.reviewService.findById(id)
     }
     @Post('create')
-    createReview(@Body() dto:reviewDto){
+    createReview(@Body() dto:ReviewDto){
         return this.reviewService.createReview(dto)
     }
 

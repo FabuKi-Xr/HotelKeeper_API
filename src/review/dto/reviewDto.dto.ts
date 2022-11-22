@@ -1,6 +1,6 @@
 import { IsInt, IsNotEmpty, IsString, Max, Min } from "class-validator";
 
-export class reviewDto{
+export class ReviewDto{
     
     @IsNotEmpty()
     HId : string

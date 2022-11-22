@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { reviewDto } from './dto';
+import { ReviewDto } from './dto';
 import { UpdateReviewDto } from './dto/updateReviewDto.dto';
 
 @Injectable()
 export class ReviewService {
     constructor (private prisma : PrismaService){}
-    async createReview(dto:reviewDto){
+    async createReview(dto:ReviewDto){
         const review:Prisma.ReviewCreateInput = await this.prisma.review.create({
             data:{
                 HId : dto.HId,
@@ -17,7 +17,9 @@ export class ReviewService {
                 service : dto.service
             }
         })
-        return "You have created a Review."
+        return {msg:"You have created a Review.",
+            statuscode : 200
+        }
     }
 
     async update(id:string,dto:UpdateReviewDto){
@@ -27,7 +29,9 @@ export class ReviewService {
             }
         })
         if (!review){
-            return "This review didnt exist."
+            return {msg:"This review didnt exist.",
+                statuscode : 403
+            }
         }
         const update = await this.prisma.review.update({
             where:{
@@ -39,6 +43,10 @@ export class ReviewService {
                 service: dto.service,
             }
         })
+        return {
+            msg : "this review was updated",
+            statuscode: 200
+        }
     }
 
     async findAll(){

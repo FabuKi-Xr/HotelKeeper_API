@@ -25,7 +25,15 @@ export class Bank4QU implements PaymentStrategy{
         return {qrcode:`You have create pupz'bank ${amount} BHT`}
     }
     public status() {
-        
+        let status = "paid"
+        if (status === "paid")
+        {
+            status = "PAID"
+        }
+        return {
+            status: status,
+            statuscode: 200
+        }
     }
     // async getBankId() {
     //     return this.bankID

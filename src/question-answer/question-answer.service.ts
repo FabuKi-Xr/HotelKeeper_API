@@ -37,7 +37,10 @@ export class QuestionAnswerService {
                 answer:dto.ans
             }
         })
-        return "QA was created."
+        return {
+            msg:"QA was created.",
+            statuscode: 200
+        }
     }
     async updateQA(dto:AnswerDto){
         const answer:Prisma.QuestionAnswerWhereUniqueInput = await this.prisma.questionAnswer.update({
@@ -51,7 +54,10 @@ export class QuestionAnswerService {
                 answer:dto.ans
             }
         })
-        return "Order's QA was update."
+        return {
+            msg:"Order's QA was update.",
+            statuscode:200
+        }
     }
     
 }
