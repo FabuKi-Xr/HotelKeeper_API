@@ -10,7 +10,12 @@ export class CartuserService {
 
     async findAll() {
         const cartuser = await this.prisma.cartUser.findMany();
-        return cartuser;
+        return {
+            statusCode: 200,
+            statusText: 'OK',
+            message: 'Find All cart user success!',
+            cartuser,
+        };
     }
 
     async findById(id: string) {
@@ -20,7 +25,12 @@ export class CartuserService {
                 cart_id: id,
             },
         });
-        return cartuser;
+        return {
+            statusCode: 200,
+            statusText: 'OK',
+            message: 'Find cart user success!',
+            cartuser,
+        };
     }
 
     async findByUserId(id: string) {
@@ -31,7 +41,12 @@ export class CartuserService {
             },
         });
         console.log('cart_id: ', cartuser);
-        return cartuser;
+        return {
+            statusCode: 200,
+            statusText: 'OK',
+            message: 'Find cart by user success!',
+            cartuser,
+        };
     }
 
     async createCartUser(dto: CreateCartUserDTO) {
@@ -44,14 +59,11 @@ export class CartuserService {
         });
         // console.log(`Create Cart : ${cartuser.cart_id}`);
         return {
-            statusCode: 200,
-            message: 'Crate cart success!',
+            statusCode: 201,
+            statusText: 'Created',
+            message: 'Add service success!',
             cartuser,
         };
-    }
-
-    async deleteCartUser(id: string) {
-        return id;
     }
 
     async updateCartUser(id: string, dto: UpdateCartUserDTO) {
@@ -61,10 +73,15 @@ export class CartuserService {
             },
             data: {
                 total: dto.total,
-                order_request: dto.order_request,
+                order_request: true,
             },
         });
         // console.log('update cart', cartuser);
-        return cartuser;
+        return {
+            statusCode: 202,
+            statusText: 'Accepted',
+            message: 'Update total & order_request success!',
+            cartuser,
+        };
     }
 }

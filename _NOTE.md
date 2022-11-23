@@ -21,6 +21,11 @@
 
 - - -
 
+## Docker
+- docker build -t <<repo name>> .
+- docker tag <<hash>>  <<username>>/<<repo name>>
+
+
 #### REF: 
 - [NestJS Prisma]("https://docs.nestjs.com/recipes/prisma#prisma")
 - [Prisma MongoDB]("https://www.prisma.io/docs/concepts/database-connectors/mongodb")
