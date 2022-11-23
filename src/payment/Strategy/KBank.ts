@@ -25,11 +25,12 @@ export class KBank implements PaymentStrategy{
     private async getQRcode(amount:number) {
 
         let date = await new Date().toLocaleString('sv-SE').split(' ')
+        console.log(date[0]+"T"+date[1]+"Z")
         const {data} = await firstValueFrom(
             this.httpService.post(process.env.KBank_genQR,
                 {...genQRMsg.body,
                     "txnAmount":amount,
-                    "requestDt" : date[0]+"T"+date[1]+"Z"
+                    requestDt : date[0]+"T"+date[1]+"Z"
                 }
                 ,{headers:{
                         "Authorization" : `Bearer ${this.token.getToken()}`,
@@ -43,7 +44,7 @@ export class KBank implements PaymentStrategy{
                     }),
                 ),
             );
-        // console.log(data)
+        console.log(data)
         return data
         
     }

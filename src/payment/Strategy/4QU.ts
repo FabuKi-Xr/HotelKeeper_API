@@ -1,28 +1,37 @@
 import { HttpService } from "@nestjs/axios";
+import { Logger } from "@nestjs/common";
+import { AxiosError } from "axios";
+import { catchError, firstValueFrom } from "rxjs";
 import { PaymentStrategy } from "./payment.interface";
 
 export class Bank4QU implements PaymentStrategy{
     private bankID = "4QU"
-
-    constructor(private httpservice:HttpService){
+    private readonly logger = new Logger(Bank4QU.name);
+    constructor(private httpService:HttpService){
         
     }
-    public pay(amount: number) {
-        /*
-        const res = await firstValueFrom(
-            this.httpService.post(ลิงก์ปั๊ป , {
-
-            })
-            .pipe(
-                catchError((error : AxiosError)=>{
+    public async pay(amount: number) {
+        let date = await new Date().toLocaleString('sv-SE').split(' ')
+        const url = await this.getqrURL(amount)
+        return url
+    }
+    private async getqrURL(amount){
+        const data = await firstValueFrom(
+            this.httpService.post(process.env.pup_genQR,
+                {
+                    "accountName": "UP TO YOU",
+                    "accountNumber": "5893667864",
+                    "amount": amount,
+                    "timeAmount": 500
+                })
+                .pipe(
+                    catchError((error : AxiosError)=>{
                         this.logger.error(error.response.data)
                         throw "An error happened!"
                     }),
-            )
-        )
-
-        */
-        return {qrcode:`You have create pupz'bank ${amount} BHT`}
+                ),
+            );
+        return data
     }
     public status() {
         let status = "paid"
@@ -35,6 +44,7 @@ export class Bank4QU implements PaymentStrategy{
             statuscode: 200
         }
     }
+    
     // async getBankId() {
     //     return this.bankID
     // }

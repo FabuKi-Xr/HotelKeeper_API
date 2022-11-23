@@ -17,6 +17,9 @@ COPY tsconfig.json ./
 RUN yarn add glob rimraf
 RUN yarn --only=dev
 
+ENV TZ=Asia/Bangkok
+RUN apk add --no-cache tzdata
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 #รวมโค้ด
 COPY . . 
@@ -56,6 +59,11 @@ RUN yarn install
 #generate prisma client
 RUN npx prisma generate
 
+ENV TZ=Asia/Bangkok
+RUN apk add --no-cache tzdata
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 EXPOSE 3000
 COPY --from=dev /usr/src/app/dist ./dist
 CMD ["node", "dist/main"]
+

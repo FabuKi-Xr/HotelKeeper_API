@@ -12,15 +12,18 @@ export class PaymentController {
 
     }
     @Post('QRpayment')
-    getQRpayment(@Body() dto:QRcodeDto){
-        if (dto.bankID == "KBank"){
-            this.paymentService.setPayment(new KBank(new HttpService))
+    async getQRpayment(@Body() dto:QRcodeDto){
+        if (dto.bankID === "KBank"){
+            console.log('A')
+            await this.paymentService.setPayment(new KBank(new HttpService))
         }
-        if (dto.bankID == "4QU"){
-            this.paymentService.setPayment(new Bank4QU(new HttpService)) 
+        if (dto.bankID === "4QU"){
+            console.log('B')
+            await this.paymentService.setPayment(new Bank4QU(new HttpService)) 
         }
-        if (dto.bankID == "Mastercard"){
-            this.paymentService.setPayment(new Mastercard(new HttpService))
+        if (dto.bankID === "Mastercard"){
+            console.log('C')
+            await this.paymentService.setPayment(new Mastercard(new HttpService))
         }
         return this.paymentService.getQR(dto)
     }

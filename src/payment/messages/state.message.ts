@@ -13,6 +13,5 @@ export const KbankQRstate = {
         "partnerId": "PTR1051673",
         "partnerSecret": "d4bded59200547bc85903574a293831b",
         "partnerTxnUid": "PARTNERTEST0002",
-        "requestDt": "2022-11-15T04:09:55Z"
     }
 }
